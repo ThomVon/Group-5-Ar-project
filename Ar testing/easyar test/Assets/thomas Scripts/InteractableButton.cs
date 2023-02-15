@@ -12,7 +12,7 @@ public class InteractableButton : MonoBehaviour
         if (_interactionCount == 0)
         {
             popup.SetActive(true);
-            ChangeColour(Color.green);
+            ChangeColour(Color.cyan);
             
         }
         else if (_interactionCount == 1)
