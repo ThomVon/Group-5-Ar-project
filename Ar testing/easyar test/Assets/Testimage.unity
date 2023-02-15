@@ -1778,7 +1778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c761ac074d64224388d60d508467aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveControl: 0
+  ActiveControl: 1
 --- !u!1 &3100142739121386586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,7 +1906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61c430477d9c324db3b8fbf8ea02a63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CenterMode: 0
+  CenterMode: 3
   CenterTarget: {fileID: 8363640268106696345}
   WorldRootController: {fileID: 3069349152933911644}
   HorizontalFlipNormal: 0
@@ -1940,7 +1940,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8441010421245322787}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0, y: 0.7072302, z: 0.7069834, w: 0}
   m_LocalPosition: {x: 0, y: 0.47, z: -0.43}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
@@ -1953,7 +1953,7 @@ Transform:
   - {fileID: 2145789103}
   m_Father: {fileID: 8473200352187466357}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 180, z: 0}
 --- !u!33 &5650726182964559498
 MeshFilter:
   m_ObjectHideFlags: 0
