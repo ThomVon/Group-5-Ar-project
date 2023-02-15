@@ -6,11 +6,16 @@ public class InteractableButton : MonoBehaviour
 {
     private int _interactionCount;
     public GameObject popup;
+    public GameObject JBL_HighPoly;
+    AudioSource JBLaudio;
 
     public void Interact()
     {
+        // Button pressed
         if (_interactionCount == 0)
         {
+            JBLaudio = JBL_HighPoly.GetComponent<AudioSource>();
+            JBLaudio.Play(0);
             popup.SetActive(true);
             ChangeColour(Color.cyan);
             
