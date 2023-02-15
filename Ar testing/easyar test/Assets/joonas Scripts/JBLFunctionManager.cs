@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class JBLFunctionManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class JBLFunctionManager : MonoBehaviour
     public GameObject OnOffIcon;
     public GameObject PairingIcon;
     public GameObject PlayPauseIcon;
+    public GameObject VolumeDownIcon;
+    public GameObject VolumeUpIcon;
+
+    public Slider volumeSlider;
 
     AudioSource OnAudio;
     AudioSource OffAudio;
@@ -86,6 +91,20 @@ public class JBLFunctionManager : MonoBehaviour
             JBL_ProcessingActive = true;
             StartCoroutine(JBLSongPlaying());
         }
+
+        // if VolumeDown button is pressed
+        if (VolumeDownIcon.activeSelf == true && JBL_DevicePowerON == true && JBL_ProcessingActive == false)
+        {
+            JBL_ProcessingActive = true;
+            StartCoroutine(JBL_LowerVolume());
+        }
+
+        // if VolumeUp button is pressed
+        if (VolumeUpIcon.activeSelf == true && JBL_DevicePowerON == true && JBL_ProcessingActive == false)
+        {
+            JBL_ProcessingActive = true;
+            StartCoroutine(JBL_IncreaseVolume());
+        }
     }
 
     IEnumerator JBLPoweredOn()
@@ -150,6 +169,30 @@ public class JBLFunctionManager : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(1f);
+        JBL_ProcessingActive = false;
+    }
+
+    IEnumerator JBL_LowerVolume()
+    {
+        // Lower volume if above 0, otherwise ignore the button press
+        if (volumeSlider.value >= 0)
+        {
+            volumeSlider.value = (volumeSlider.value - 0.1f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+        JBL_ProcessingActive = false;
+    }
+
+    IEnumerator JBL_IncreaseVolume()
+    {
+        // Increase volume if below 1, otherwise ignore the button press
+        if (volumeSlider.value <= 1)
+        {
+            volumeSlider.value = (volumeSlider.value + 0.1f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
         JBL_ProcessingActive = false;
     }
 }
