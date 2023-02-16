@@ -29,6 +29,8 @@ public class JBLFunctionManager : MonoBehaviour
     public bool JBL_PairingActivated = false;
     public bool JBL_SongActivated = false;
     public bool SongIsPlaying = false;
+    public bool SongPaused = false;
+    public bool VolumeAdjustingInProgress = false;
     // To prevent over clicking
     public bool JBL_ProcessingActive = false;
     public bool JBL_BluetoothProcessingActive = false;
@@ -92,17 +94,24 @@ public class JBLFunctionManager : MonoBehaviour
             StartCoroutine(JBLSongPlaying());
         }
 
-        // if VolumeDown button is pressed
-        if (VolumeDownIcon.activeSelf == true && JBL_DevicePowerON == true && JBL_ProcessingActive == false)
+        // if playbutton is disabled
+        if (PlayPauseIcon.activeSelf == false && JBL_DevicePowerON == true && JBL_BluetoothActivated == true && JBL_PairingActivated == true && SongIsPlaying == true)
         {
             JBL_ProcessingActive = true;
+            StartCoroutine(JBLSongPause());
+        }
+
+        // if VolumeDown button is pressed
+        if (VolumeDownIcon.activeSelf == true && JBL_DevicePowerON == true && VolumeAdjustingInProgress == false)
+        {
+            VolumeAdjustingInProgress = true;
             StartCoroutine(JBL_LowerVolume());
         }
 
         // if VolumeUp button is pressed
-        if (VolumeUpIcon.activeSelf == true && JBL_DevicePowerON == true && JBL_ProcessingActive == false)
+        if (VolumeUpIcon.activeSelf == true && JBL_DevicePowerON == true && VolumeAdjustingInProgress == false)
         {
-            JBL_ProcessingActive = true;
+            VolumeAdjustingInProgress = true;
             StartCoroutine(JBL_IncreaseVolume());
         }
     }
@@ -120,6 +129,9 @@ public class JBLFunctionManager : MonoBehaviour
         // Song starts from zero next time device is activated
         if (SongIsPlaying == true)
         {
+            JBL_SongActivated = false;
+            SongIsPlaying = false;
+            SongPaused = false;
             PlayPauseAudio.Stop();
         }
 
@@ -131,6 +143,7 @@ public class JBLFunctionManager : MonoBehaviour
         JBL_ProcessingActive = false;
         JBL_SongActivated = false;
         SongIsPlaying = false;
+        SongPaused = false;
 
 
     }
@@ -145,29 +158,41 @@ public class JBLFunctionManager : MonoBehaviour
 
     IEnumerator JBLSongPlaying()
     {
-        // starts playing song if not activated yet
-        if (JBL_SongActivated == false)
+        // UnPause music if song is already activated
+        if (SongPaused == true)
         {
-            JBL_SongActivated = true;
-            SongIsPlaying = true;
-            PlayPauseAudio.Play(0);
+            PlayPauseAudio.UnPause();
+            SongPaused = false;
+        }
+        else
+        { 
+            // starts playing song if not activated yet
+            if (JBL_SongActivated == false)
+                {
+                    JBL_SongActivated = true;
+                    SongIsPlaying = true;
+                    PlayPauseAudio.Play(0);
+                }
+
         }
 
-        else
+        yield return new WaitForSeconds(1f);
+        JBL_ProcessingActive = false;
+    }
+
+    IEnumerator JBLSongPause()
+    {
+        // Pauses song if song is playing
+        if (SongIsPlaying == true)
         {
-            // Pause music
-            if (SongIsPlaying == true)
+
+            if (SongPaused == false)
             {
                 PlayPauseAudio.Pause();
-                SongIsPlaying = false;
-            }
-            // Unpause music
-            else
-            {
-                PlayPauseAudio.UnPause();
-                SongIsPlaying = true;
+                SongPaused = true;
             }
         }
+
         yield return new WaitForSeconds(1f);
         JBL_ProcessingActive = false;
     }
@@ -181,7 +206,7 @@ public class JBLFunctionManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        JBL_ProcessingActive = false;
+        VolumeAdjustingInProgress = false;
     }
 
     IEnumerator JBL_IncreaseVolume()
@@ -193,6 +218,6 @@ public class JBLFunctionManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        JBL_ProcessingActive = false;
+        VolumeAdjustingInProgress = false;
     }
 }
